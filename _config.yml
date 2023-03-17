@@ -1,5 +1,5 @@
 baseurl: "/amp" # the subpath of your site, e.g. /blog
-url: "https://hacktives.github.io/amp" # the base hostname & protocol for your site, e.g. http://example.com
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
 
 # Build settings
