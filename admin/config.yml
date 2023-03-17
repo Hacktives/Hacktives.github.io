@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: pelajarblog/post
+   repo: Hacktives/amp
   branch: main
 publish_mode: editorial_workflow
 media_folder: "assets/images"
