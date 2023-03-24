@@ -1,9 +1,9 @@
 backend:
   name: github
-   repo: Hacktives/amp
+   repo: Hacktives/hacktives.github.io
   branch: main
 publish_mode: editorial_workflow
-media_folder: "amp/images/"
+media_folder: "hacktives.github.io/images/"
 
 
 collections:
