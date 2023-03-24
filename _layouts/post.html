@@ -42,6 +42,7 @@ layout: default
 
 
   <div class="container">
+    {% include ads.html %}
   <div class="row">
     <!-- begin post -->
     <article class="post {{ no-image }} col col-8 col-t-10 col-m-12">
@@ -81,7 +82,7 @@ layout: default
     <!-- end post -->
     </div>
   </div>
-
+{% include ads.html %}
   <div class="container">
   <div class="post__navigation">
     {% if page.previous.url %}
