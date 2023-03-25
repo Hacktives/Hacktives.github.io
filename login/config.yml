@@ -3,7 +3,7 @@ backend:
   repo: Hacktives/hacktives.github.io
   branch: main
 publish_mode: editorial_workflow
-media_folder: "hacktives.github.io/tree/main/images"
+media_folder: "hacktives.github.io/images"
 
 
 collections:
