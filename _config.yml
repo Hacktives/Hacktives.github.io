@@ -19,10 +19,19 @@ defaults:
   - scope:
       path: '_pages'
     values:
-      permalink: /:basename:output_ext
+      permalink: /:basename
 
 include:
   - _pages
+  # Pages Post
+defaults:
+  - scope:
+      path: '_post'
+    values:
+      permalink: /:basename
+
+include:
+  - _post
 
 
 # Tags
