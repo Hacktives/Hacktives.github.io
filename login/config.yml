@@ -1,6 +1,6 @@
 backend:
-  name: Hacktives
-  repo: /hacktives.github.io
+  name: github.com
+  repo: Hacktives/hacktives.github.io
   branch: main
 publish_mode: editorial_workflow
 media_folder: "/images"
