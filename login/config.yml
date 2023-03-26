@@ -1,5 +1,6 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: Hacktives/hacktives.github.io
   branch: main
 publish_mode: editorial_workflow
 media_folder: "/images"
