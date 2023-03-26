@@ -10,9 +10,7 @@ permalink: /404.html
   <p>The requested page could not be found.</p>
   {% include ads.html %}
   <b:if cond='data:view.isError'>
-<script>
-window.location.href = &quot;{{site.baseurl}}&quot;;
-</script>
+<meta http-equiv="refresh" content="0; url='{{site.baseurl}}/'" />
 </b:if>
   <p class="back-arrow"><i class="ion ion-md-arrow-back"></i> <a href="{{site.baseurl}}/">Back to the blog</a></p>
 </div>
