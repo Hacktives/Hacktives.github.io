@@ -23,17 +23,7 @@ defaults:
 
 include:
   - _pages
-  # Pages Post
-defaults:
-  - scope:
-      path: '_post'
-    values:
-      permalink: /:basename
-
-include:
-  - _post
-
-
+  
 # Tags
 tag_page_dir:         tag
 tag_page_layout:      tag_page
