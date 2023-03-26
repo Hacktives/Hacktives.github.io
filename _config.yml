@@ -1,5 +1,6 @@
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://www.idev.my.id" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/zolan" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+
 
 # Build settings
 markdown: kramdown
@@ -18,7 +19,7 @@ defaults:
   - scope:
       path: '_pages'
     values:
-      permalink: /:basename
+      permalink: /:basename:output_ext
 
 include:
   - _pages
