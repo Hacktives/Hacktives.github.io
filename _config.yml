@@ -31,7 +31,7 @@ defaults:
       path: "_posts"
       type: "posts"
     values:
-      permalink: /:title
+      permalink: /:categories/:title
       layout: 
 
 include:
