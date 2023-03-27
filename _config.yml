@@ -1,10 +1,10 @@
-baseurl: "/" # the subpath of your site, e.g. /blog
+baseurl: "idev.my.id" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
 
 # Build settings
 markdown: kramdown
-permalink: /:title
+permalink: none
 plugins:
   - jekyll-paginate
   - jekyll-sitemap
