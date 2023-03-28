@@ -33,7 +33,7 @@ layout: default
   {% if page.image %}
   {% include ads.html %}
     <div class="post__head">
-      <div class="post-image" style="background-image: url({{site.baseurl}}{{page.image}})"></div>
+      <div class="post-image" style="background-image: \({{site.baseurl}}{{page.image}})"></div>
     </div>
   {% else %}
     {% assign no-image = 'post-no-image' %}
