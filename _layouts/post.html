@@ -33,7 +33,7 @@ layout: default
   {% assign no-image = nil %}
   {% if page.image %}
     <div class="post__head">
-      <div class="post-image" style="background-image: url({{site.baseurl}}/{{page.image}})"></div>
+      <div class="post-image" style="background-image: url({{site.baseurl}}/images/{{page.image}})"></div>
     </div>
   {% else %}
     {% assign no-image = 'post-no-image' %}
@@ -48,6 +48,7 @@ layout: default
     <article class="post {{ no-image }} col col-8 col-t-10 col-m-12">
 
       <div class="post__content">
+	  {% include ads.html %}
         {{ content }}
       </div>
 
@@ -79,15 +80,16 @@ layout: default
         </ul>
       </div>
     </article>
+	{% include ads.html %}
     <!-- end post -->
     </div>
   </div>
-{% include ads.html %}
+
   <div class="container">
   <div class="post__navigation">
     {% if page.previous.url %}
     <div class="prev">
-      <a class="post__nav__image" href="{{ site.baseurl }}{{page.previous.url}}" style="background-image: url({{site.baseurl}}/{{page.previous.image}})"></a>
+      <a class="post__nav__image" href="{{ site.baseurl }}{{page.previous.url}}" style="background-image: url({{site.baseurl}}/images/{{page.previous.image}})"></a>
       <h2 class="post__nav__title">
         <i class="ion ion-md-arrow-back"></i>
         <a href="{{ site.baseurl }}{{page.previous.url}}">{{page.previous.title}}</a>
