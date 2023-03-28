@@ -1,0 +1,144 @@
+---
+id: 195
+title: 'Mengatasi &#8216;SyntaxError: Unexpected token < in JSON at position 0'''
+date: '2021-06-18T01:30:00+00:00'
+author: admin
+layout: post
+guid: 'http://localhost/wordpress/index.php/2021/06/18/mengatasi-syntaxerror-unexpected-token-in-json-at-position-0/'
+permalink: /index.php/2021/06/18/mengatasi-syntaxerror-unexpected-token-in-json-at-position-0/
+blogger_blog:
+    - webidevloper.blogspot.com
+blogger_author:
+    - IDEV.My.ID
+blogger_internal:
+    - /feeds/2636143461486592706/posts/default/148417403531725812
+categories:
+    - CyberSecurityTutorial
+---
+
+<div style="clear: both; text-align: center;">[<span style="font-family: Fira Sans;">![](https://1.bp.blogspot.com/-ZqPTpkwPJwE/YMv2bSiHWnI/AAAAAAAABdQ/LxDZAkII3rQpys4DjgYm7_CqnqK10-a1wCLcBGAsYHQ/w434-h640/IMG_20210618_082608.JPG)</span>](https://1.bp.blogspot.com/-ZqPTpkwPJwE/YMv2bSiHWnI/AAAAAAAABdQ/LxDZAkII3rQpys4DjgYm7_CqnqK10-a1wCLcBGAsYHQ/s798/IMG_20210618_082608.JPG)</div><span style="font-family: Fira Sans;">  
+</span>
+
+<span style="font-family: Fira Sans;">  
+</span>
+
+<span style="font-family: Fira Sans;"><span face=""Oracle Sans", Helvetica, Tahoma, Arial, sans-serif" style="vertical-align: inherit;">K</span><span face=""Oracle Sans", Helvetica, Tahoma, Arial, sans-serif" style="color: #1a1816; font-size: 16px; vertical-align: inherit;">esalahan ‘Uncaught SyntaxError: Unexpected token u in JSON at position 0’ disebabkan ketika klien diminta untuk mengeksekusi </span>`JSON.parse()`<span face=""Oracle Sans", Helvetica, Tahoma, Arial, sans-serif" style="color: #1a1816; font-size: 16px; vertical-align: inherit;">string yang dimulai dengan </span>`u`<span face=""Oracle Sans", Helvetica, Tahoma, Arial, sans-serif" style="color: #1a1816; font-size: 16px; vertical-align: inherit;"><span style="vertical-align: inherit;">alih </span><span style="vertical-align: inherit;">– </span><span style="vertical-align: inherit;">alih JSON yang diharapkan. </span><span style="vertical-align: inherit;">Penyebab mendasar yang paling mungkin adalah kode sisi server yang biasanya mengembalikan JSON tidak berfungsi dan malah mengirim kembali versi </span></span>`undefined`<span face=""Oracle Sans", Helvetica, Tahoma, Arial, sans-serif" style="color: #1a1816; font-size: 16px; vertical-align: inherit;"><span style="vertical-align: inherit;">primitif </span><span style="vertical-align: inherit;">yang </span><span style="vertical-align: inherit;">dirangkai (misalnya, dengan mengembalikan variabel sebelum nilainya ditetapkan).</span></span></span>
+
+<span style="font-family: Fira Sans; vertical-align: inherit;"><span style="vertical-align: inherit;">Ini adalah kesalahan penguraian JavaScript umum, tidak dihasilkan oleh server atau aplikasi sisi klien tertentu. </span><span style="vertical-align: inherit;">Di NetSuite/SuiteCommerce, biasanya karena Anda memiliki fungsi di dalam layanan atau pengontrol layanan yang mengambil data rekaman; </span><span style="vertical-align: inherit;">fungsi itu kemudian tidak berfungsi dan mengembalikan variabel kosong.</span></span>
+
+## <span style="font-family: Fira Sans; vertical-align: inherit;">Pesan eror</span>
+
+<span style="font-family: Fira Sans; vertical-align: inherit;"><span style="vertical-align: inherit;">Mari kita mulai dengan tampilannya. </span><span style="vertical-align: inherit;">Anda mungkin mendapatkan kesalahan berikut baik di konsol pengembang web Anda, atau, lebih mungkin, di NetSuite melalui log eksekusi aplikasi SSP:</span></span>
+
+<div style="background-color: #fdfdfd; color: #1a1816; font-size: 16px;"><div style="background: rgb(247, 247, 255); margin-bottom: 15px;">```
+<pre style="background-attachment: initial; background-clip: initial; background-image: initial; background-origin: initial; background-position: initial; background-repeat: initial; background-size: initial; border-radius: 3px; border: 1px solid rgb(238, 100, 79); font-size: 0.9em; margin-bottom: 15px; margin-top: 0px; overflow-x: auto; padding: 8px 12px; white-space: pre-wrap; word-break: break-word;">```
+<span style="font-family: Fira Sans;"><span style="color: navy;">Uncaught</span> <span style="color: navy;">SyntaxError</span><span>:</span> <span style="color: navy;">Unexpected</span> <span style="color: navy;">token</span> <span style="color: navy;">u</span> <span style="font-weight: bold;">in</span> <span style="color: navy;">JSON</span> <span style="color: navy;">at</span> <span style="color: navy;">position</span> <span style="color: #025f5f;">0</span><br></br></span>
+```
+```
+
+</div></div>## <span style="font-family: Fira Sans; vertical-align: inherit;">Isu</span>
+
+<span style="font-family: Fira Sans; vertical-align: inherit;"><span style="vertical-align: inherit;">Biasanya ini terjadi saat Anda bekerja pada file layanan, di mana Anda menyambung ke NetSuite dan kemudian meminta beberapa data. </span><span style="vertical-align: inherit;">Ketika berhadapan dengan transmisi ke dan dari toko web, data biasanya dalam bentuk objek. </span><span style="vertical-align: inherit;">Pada berbagai tahap data ini akan dirangkai (yaitu dikonversi dari objek ke string) atau diuraikan (dikonversi dari string ke objek) dan di sinilah kesalahan ini muncul.</span></span>
+
+<span style="font-family: Fira Sans; vertical-align: inherit;"><span style="vertical-align: inherit;">Jika Anda mencoba mengurai sesuatu selain objek, prosesor JavaScript biasanya akan gagal. </span><span style="vertical-align: inherit;">Saat mengharapkan sebuah objek, itu akan berhenti pada titik yang tepat di mana ia gagal, itulah sebabnya ia akan mengembalikan posisi di mana ia macet. </span><span style="vertical-align: inherit;">Token yang tidak terduga berarti bahwa ia mengharapkan data, tetapi malah mendapat kata kunci perintah (tetapi kesalahan ini dapat dipicu oleh hal-hal seperti string juga karena cara mereka diperintahkan untuk digunakan).</span></span>
+
+<span style="font-family: Fira Sans;"><span style="vertical-align: inherit;">Jika token tak terduga adalah a </span>`u`<span style="vertical-align: inherit;">dan posisinya 0 (yaitu hal pertama) maka itu berarti ia mencoba mengurai sesuatu yang dimulai dengan </span>**u**<span style="vertical-align: inherit;"><span style="vertical-align: inherit;"> . </span><span style="vertical-align: inherit;">Dan kata kunci familiar apa dalam JavaScript yang dimulai dengan </span></span>**u**<span style="vertical-align: inherit;"> ?</span></span>
+
+`<span style="font-family: Fira Sans;">undefined</span>`
+
+<span style="font-family: Fira Sans; vertical-align: inherit;">Dengan kata lain, jika Anda mendapatkan pesan kesalahan pada judul posting ini, maka kemungkinan Anda telah memberi tahu prosesor JavaScript untuk menjalankan yang berikut:</span>
+
+<div style="background-color: #fdfdfd; color: #1a1816; font-size: 16px;"><div style="background: rgb(247, 247, 255); margin-bottom: 15px;">```
+<pre style="background-attachment: initial; background-clip: initial; background-image: initial; background-origin: initial; background-position: initial; background-repeat: initial; background-size: initial; border-radius: 3px; border: 1px solid rgb(238, 100, 79); font-size: 0.9em; margin-bottom: 15px; margin-top: 0px; overflow-x: auto; padding: 8px 12px; white-space: pre-wrap; word-break: break-word;">```
+<span style="font-family: Fira Sans;"><span style="color: navy;">JSON</span><span>.</span><span style="color: navy;">parse</span><span>(</span><span style="font-weight: bold;">undefined</span><span>)</span><br></br></span>
+```
+```
+
+</div></div><span style="font-family: Fira Sans; vertical-align: inherit;">Coba ini di konsol pengembang browser Anda untuk melihat apa yang saya maksud.</span>
+
+## <span style="font-family: Fira Sans; vertical-align: inherit;">Menyelesaikan Masalah</span>
+
+<span style="font-family: Fira Sans; vertical-align: inherit;"><span style="vertical-align: inherit;">Jadi, kita tahu apa yang terjadi. </span><span style="vertical-align: inherit;">Tapi mengapa itu terjadi? </span><span style="vertical-align: inherit;">Mari kita lihat beberapa kemungkinan penyebabnya.</span></span>
+
+### <span style="font-family: Fira Sans; vertical-align: inherit;">Kembali tidak terdefinisi</span>
+
+<span style="font-family: Fira Sans;"><span style="vertical-align: inherit;">Sekarang, Anda mungkin belum menyuruhnya untuk kembali secara eksplisit </span>`undefined`<span style="vertical-align: inherit;"><span style="vertical-align: inherit;">sehingga kemudian dapat mencoba menguraikannya (mengapa Anda melakukannya?), tetapi kemungkinannya adalah Anda telah memberi tahu model, layanan, atau pengontrol layanan Anda untuk mengembalikan nilai ke frontend dari situs Anda tetapi nilai tersebut belum berhasil diteruskan. </span><span style="vertical-align: inherit;">Anda telah melakukan sesuatu seperti, “Kembalikan nilai variabel foo” tetapi telah mengacaukannya.</span></span></span>
+
+<span style="font-family: Fira Sans; vertical-align: inherit;">Untuk memeriksa ini, periksa (atau catat!) apa yang Anda kembalikan:</span>
+
+- <span style="font-family: Fira Sans; vertical-align: inherit;">Apakah itu sebuah objek?</span>
+- <span style="font-family: Fira Sans; vertical-align: inherit;">Apakah itu memiliki properti dan sudahkah Anda memanggilnya yang benar-benar ada?</span>
+- <span style="font-family: Fira Sans; vertical-align: inherit;">Apakah properti tersebut memiliki nilai?</span>
+- <span style="font-family: Fira Sans; vertical-align: inherit;">Apakah ada kesalahan ketik dalam kode Anda, seperti nama yang salah eja?</span>
+
+<span style="font-family: Fira Sans; vertical-align: inherit;"><span style="vertical-align: inherit;">Untuk mengilustrasikan ide ini, lihat bahwa mencoba mengurai properti objek yang belum Anda tentukan juga akan mengembalikan kesalahan ini. </span><span style="vertical-align: inherit;">Sebagai contoh:</span></span>
+
+<div style="background-color: #fdfdfd; color: #1a1816; font-size: 16px;"><div style="background: rgb(247, 247, 255); margin-bottom: 15px;">```
+<pre style="background-attachment: initial; background-clip: initial; background-image: initial; background-origin: initial; background-position: initial; background-repeat: initial; background-size: initial; border-radius: 3px; border: 1px solid rgb(238, 100, 79); font-size: 0.9em; margin-bottom: 15px; margin-top: 0px; overflow-x: auto; padding: 8px 12px; white-space: pre-wrap; word-break: break-word;">```
+<span style="font-family: Fira Sans;"><span style="font-weight: bold;">var</span> <span style="color: navy;">obj</span> <span style="font-weight: bold;">=</span> <span>{};</span><br></br><span style="color: navy;">obj</span><span>.</span><span style="color: navy;">foo</span><span>;</span><br></br><span style="font-weight: bold;">></span> <span style="font-weight: bold;">undefined</span><br></br><br></br><span style="color: navy;">JSON</span><span>.</span><span style="color: navy;">parse</span><span>(</span><span style="color: navy;">obj</span><span>.</span><span style="color: navy;">foo</span><span>);</span><br></br><span style="font-weight: bold;">></span> <span style="color: navy;">Uncaught</span> <span style="color: navy;">SyntaxError</span><span>:</span> <span style="color: navy;">Unexpected</span> <span style="color: navy;">token</span> <span style="color: navy;">u</span> <span style="font-weight: bold;">in</span> <span style="color: navy;">JSON</span> <span style="color: navy;">at</span> <span style="color: navy;">position</span> <span style="color: #025f5f;">0</span><br></br></span>
+```
+```
+
+</div></div><span style="font-family: Fira Sans; vertical-align: inherit;"><span style="vertical-align: inherit;">Jika kode Anda terlihat bagus, ingatlah bahwa ini juga bisa terjadi jika Anda mengembalikan variabel sebelum nilainya (sebuah objek) dihasilkan. </span><span style="vertical-align: inherit;">Dalam kasus ini, pastikan semua operasi yang diperlukan telah selesai. </span><span style="vertical-align: inherit;">Misalnya, jika objek Anda akan dibuat setelah janji diselesaikan, pastikan itu telah diselesaikan sebelum diteruskan kembali. </span><span style="vertical-align: inherit;">Jika janji gagal, pastikan sudah diatur untuk mengembalikan objek yang berisi pesan kesalahan!</span></span>
+
+<span style="font-family: Fira Sans;"><span style="vertical-align: inherit;">Ingat, jika Anda akan mencoba dan mencatat objek ke log aplikasi SSP, Anda harus merangkainya terlebih dahulu, jika tidak, Anda hanya akan masuk </span>`[object Object]`<span style="vertical-align: inherit;">log.</span></span>
+
+### <span style="font-family: Fira Sans; vertical-align: inherit;">Mencoba Mengurai String</span>
+
+<span style="font-family: Fira Sans;"><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">Pesan kesalahan juga dapat terjadi jika Anda mengembalikan string yang kemudian coba diurai oleh aplikasi seolah-olah itu adalah objek. </span><span style="vertical-align: inherit;">Pertimbangkan contoh di mana Anda mencoba mengurai string yang dimulai dengan huruf </span></span>**u**<span style="vertical-align: inherit;"> :</span></span>
+
+<div style="background-color: #fdfdfd; color: #1a1816; font-size: 16px;"><div style="background: rgb(247, 247, 255); margin-bottom: 15px;">```
+<pre style="background-attachment: initial; background-clip: initial; background-image: initial; background-origin: initial; background-position: initial; background-repeat: initial; background-size: initial; border-radius: 3px; border: 1px solid rgb(238, 100, 79); font-size: 0.9em; margin-bottom: 15px; margin-top: 0px; overflow-x: auto; padding: 8px 12px; white-space: pre-wrap; word-break: break-word;">```
+<span style="font-family: Fira Sans;"><span style="color: navy;">JSON</span><span>.</span><span style="color: navy;">parse</span><span>(</span><span>'</span><span style="color: #dd1144;">umbrella</span><span>'</span><span>)</span><br></br><span style="font-weight: bold;">></span> <span style="color: navy;">Uncaught</span> <span style="color: navy;">SyntaxError</span><span>:</span> <span style="color: navy;">Unexpected</span> <span style="color: navy;">token</span> <span style="color: navy;">u</span> <span style="font-weight: bold;">in</span> <span style="color: navy;">JSON</span> <span style="color: navy;">at</span> <span style="color: navy;">position</span> <span style="color: #025f5f;">0</span><br></br></span>
+```
+```
+
+</div></div>## <span style="font-family: Fira Sans; vertical-align: inherit;">Kesalahan Terkait</span>
+
+<span style="font-family: Fira Sans; vertical-align: inherit;">Ada beberapa kesalahan lain yang terlihat mirip dengan yang ini.</span>
+
+### <span style="font-family: Fira Sans; vertical-align: inherit;">Mencoba Mengurai Data Tanpa String</span>
+
+<span style="font-family: Fira Sans;"><span style="vertical-align: inherit;">Hal penting lainnya yang perlu diingat adalah bahwa sebelum JSON dapat </span>*diuraikan,*<span style="vertical-align: inherit;"><span style="vertical-align: inherit;"> JSON </span><span style="vertical-align: inherit;">harus terlebih dahulu </span></span>*dirangkai*<span style="vertical-align: inherit;"><span style="vertical-align: inherit;"> . </span><span style="vertical-align: inherit;">Sekarang, pengontrol layanan modern diatur untuk mendeteksi ketika data ‘kompleks’ sedang dikirim, sehingga secara otomatis akan mencoba merangkai array atau objek yang sedang dikirim kembali. </span><span style="vertical-align: inherit;">Untuk alasan apa pun, ini mungkin tidak terjadi sehingga Anda perlu melacak bagian tertentu dalam kode Anda dan melihat apa yang terjadi.</span></span></span>
+
+<span style="font-family: Fira Sans;"><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">Atau, Anda mungkin terbiasa menggunakan pengontrol layanan dan tidak menyadari bahwa Anda perlu melakukan operasi ini secara manual jika Anda menulis </span><span style="vertical-align: inherit;">file </span></span>**.ss**<span style="vertical-align: inherit;"><span style="vertical-align: inherit;"> khusus </span><span style="vertical-align: inherit;">, atau jika Anda menulis sesuatu seperti Suitelet.</span></span></span>
+
+<span style="font-family: Fira Sans;"><span style="vertical-align: inherit;">Dengan kata lain, Anda mungkin telah mengirim objek Anda kembali dalam bentuk yang baik dan benar, tetapi objek tersebut tidak dirangkai terlebih dahulu, dan bagian </span>*penerima*<span style="vertical-align: inherit;"><span style="vertical-align: inherit;"> dari aplikasi telah diberitahu untuk mengurai respons. </span><span style="vertical-align: inherit;">Jika mendapatkan kembali objek tanpa string, dan mencoba menguraikannya, itu akan gagal.</span></span></span>
+
+<span style="font-family: Fira Sans; vertical-align: inherit;">Untuk mengilustrasikannya, perhatikan contoh ini:</span>
+
+<div style="background-color: #fdfdfd; color: #1a1816; font-size: 16px;"><div style="background: rgb(247, 247, 255); margin-bottom: 15px;">```
+<pre style="background-attachment: initial; background-clip: initial; background-image: initial; background-origin: initial; background-position: initial; background-repeat: initial; background-size: initial; border-radius: 3px; border: 1px solid rgb(238, 100, 79); font-size: 0.9em; margin-bottom: 15px; margin-top: 0px; overflow-x: auto; padding: 8px 12px; white-space: pre-wrap; word-break: break-word;">```
+<span style="font-family: Fira Sans;"><span style="color: #514b45; font-style: italic;">// Create my response object</span><br></br><span style="font-weight: bold;">var</span> <span style="color: navy;">obj</span> <span style="font-weight: bold;">=</span> <span>{</span><span style="color: #025f5f;">message</span><span>:</span> <span>'</span><span style="color: #dd1144;">Hello!</span><span>'</span><span>}</span><br></br><span style="color: navy;">obj</span><span>.</span><span style="color: navy;">message</span><br></br><span style="font-weight: bold;">></span> <span>"</span><span style="color: #dd1144;">Hello!</span><span>"</span><br></br><br></br><span style="color: #514b45; font-style: italic;">// Send the content back, eg:</span><br></br><span style="color: #514b45; font-style: italic;">// this.sendContent(obj)</span><br></br><br></br><span style="color: #514b45; font-style: italic;">// Receive the content and automatically attempt to parse it</span><br></br><span style="color: navy;">JSON</span><span>.</span><span style="color: navy;">parse</span><span>(</span><span style="color: navy;">obj</span><span>)</span><br></br><span style="font-weight: bold;">></span> <span style="color: navy;">Uncaught</span> <span style="color: navy;">SyntaxError</span><span>:</span> <span style="color: navy;">Unexpected</span> <span style="color: navy;">token</span> <span style="color: navy;">o</span> <span style="font-weight: bold;">in</span> <span style="color: navy;">JSON</span> <span style="color: navy;">at</span> <span style="color: navy;">position</span> <span style="color: #025f5f;">1</span><br></br><span style="color: #514b45; font-style: italic;">// Note that the error is slightly different in content, but generally the same problem</span><br></br><br></br><span style="color: #514b45; font-style: italic;">// In reality, this is the shorthand for what should be happening</span><br></br><span style="color: navy;">JSON</span><span>.</span><span style="color: navy;">parse</span><span>(</span><span style="color: navy;">JSON</span><span>.</span><span style="color: navy;">stringify</span><span>(</span><span style="color: navy;">obj</span><span>))</span><br></br><span style="font-weight: bold;">></span> <span>{</span><span style="color: #025f5f;">message</span><span>:</span> <span>"</span><span style="color: #dd1144;">Hello!</span><span>"</span><span>}</span><br></br></span>
+```
+```
+
+</div></div>### <span style="font-family: Fira Sans; vertical-align: inherit;">Mencoba Mengurai Dokumen HTML</span>
+
+<span style="font-family: Fira Sans; vertical-align: inherit;"><span style="vertical-align: inherit;">Dalam beberapa kasus, halaman kesalahan HTML lengkap dibuat dan dikirim kembali alih-alih nilai yang diinginkan. </span><span style="vertical-align: inherit;">Ketika ini terjadi, Anda akan melihat sesuatu seperti ini:</span></span>
+
+<div style="background-color: #fdfdfd; color: #1a1816; font-size: 16px;"><div style="background: rgb(247, 247, 255); margin-bottom: 15px;">```
+<pre style="background-attachment: initial; background-clip: initial; background-image: initial; background-origin: initial; background-position: initial; background-repeat: initial; background-size: initial; border-radius: 3px; border: 1px solid rgb(238, 100, 79); font-size: 0.9em; margin-bottom: 15px; margin-top: 0px; overflow-x: auto; padding: 8px 12px; white-space: pre-wrap; word-break: break-word;">```
+<span style="font-family: Fira Sans;"><span style="color: navy;">Uncaught</span> <span>(</span><span style="font-weight: bold;">in</span> <span style="color: navy;">promise</span><span>)</span> <span style="color: navy;">SyntaxError</span><span>:</span> <span style="color: navy;">Unexpected</span> <span style="color: navy;">token</span> <span style="font-weight: bold;"><</span> <span style="font-weight: bold;">in</span> <span style="color: navy;">JSON</span> <span style="color: navy;">at</span> <span style="color: navy;">position</span> <span style="color: #025f5f;">0</span><br></br></span>
+```
+```
+
+</div></div><span style="font-family: Fira Sans;"><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">Biasanya ada alasan yang sangat spesifik mengapa ini terjadi, itu tergantung pada keadaan Anda. </span><span style="vertical-align: inherit;">Namun, secara umum: Anda telah mencoba meminta sesuatu, server gagal, dan, alih-alih mengembalikan objek, itu menghasilkan halaman kesalahan HTML lengkap dan mengirimkannya kembali. </span><span style="vertical-align: inherit;">Alasan mengapa ada </span></span>`<`<span style="vertical-align: inherit;"><span style="vertical-align: inherit;">karakter di awal adalah karena selalu karakter pertama di sumber halaman HTML. </span><span style="vertical-align: inherit;">Dalam kebanyakan kasus, itu akan menjadi </span></span>``<span style="vertical-align: inherit;">.</span></span>
+
+<span style="font-family: Fira Sans;"><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">Oleh karena itu, jika Anda ingin memecahkan masalah kesalahan ini, lihat </span><span style="vertical-align: inherit;">tab </span></span>**Jaringan**<span style="vertical-align: inherit;"><span style="vertical-align: inherit;"> browser Anda </span><span style="vertical-align: inherit;">di alat pengembang dan lihat halaman apa yang dikirimkan kembali kepada Anda. </span><span style="vertical-align: inherit;">Biasanya akan ada pesan kesalahan di badan HTML.</span></span></span>
+
+## <span style="font-family: Fira Sans; vertical-align: inherit;">Kiat Bonus: Menggunakan Metode JSON untuk Menyalin Objek</span>
+
+<span style="font-family: Fira Sans;"><span style="vertical-align: inherit;">Akhirnya, tip menyenangkan yang berhubungan dengan </span>`JSON.parse()`<span style="vertical-align: inherit;">dan </span>`JSON.stringify()`<span style="vertical-align: inherit;"><span style="vertical-align: inherit;">: jika Anda pernah ingin </span><span style="vertical-align: inherit;">menyalin objek secara </span></span>*mendalam*<span style="vertical-align: inherit;"> sehingga nilai objek disalin ke objek baru dengan </span>*nilai*<span style="vertical-align: inherit;"> daripada </span>*referensi*<span style="vertical-align: inherit;"> , Anda dapat menggunakan </span>`JSON.parse(JSON.stringify(obj))`<span style="vertical-align: inherit;">, di mana </span>`obj`<span style="vertical-align: inherit;">objek Anda.</span></span>
+
+<span style="font-family: Fira Sans;"><span style="vertical-align: inherit;">Sebagai catatan, Anda harus menggunakan </span>`_.deepCopy()`<span style="vertical-align: inherit;">metode bawaan kami di hampir semua kasus karena kami memperhitungkan situasi tertentu di mana menyalin objek secara mendalam dapat menjadi masalah (seperti dengan model Backbone).</span></span>
+
+<span style="font-family: Fira Sans;"><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">Bagaimanapun, apa yang dilakukan stringifikasi dan penguraian segera adalah mengubah objek menjadi string, sehingga mengubah properti dan nilai-nilai yang diselesaikan dari seluruh objek menjadi string (dan karenanya mengakhiri koneksi pointer mereka) dan kemudian mengubahnya kembali menjadi objek yang Anda bisa menggunakan. </span><span style="vertical-align: inherit;">Ini bisa sangat membantu ketika Anda ingin membuat salinan objek seperti </span></span>*pada saat itu*<span style="vertical-align: inherit;"> :</span></span>
+
+<div style="background-color: #fdfdfd; color: #1a1816; font-size: 16px;"><div style="background: rgb(247, 247, 255); margin-bottom: 15px;">```
+<pre style="background-attachment: initial; background-clip: initial; background-image: initial; background-origin: initial; background-position: initial; background-repeat: initial; background-size: initial; border-radius: 3px; border: 1px solid rgb(238, 100, 79); font-size: 0.9em; margin-bottom: 15px; margin-top: 0px; overflow-x: auto; padding: 8px 12px; white-space: pre-wrap; word-break: break-word;">```
+<span style="font-family: Fira Sans;"><span style="color: #514b45; font-style: italic;">// Create two objects, one which is a copy of it by reference</span><br></br><span style="font-weight: bold;">var</span> <span style="color: navy;">obj1</span> <span style="font-weight: bold;">=</span> <span>{</span><span style="color: #025f5f;">message</span><span>:</span> <span>'</span><span style="color: #dd1144;">Hello!</span><span>'</span><span>}</span><br></br><span style="font-weight: bold;">var</span> <span style="color: navy;">obj2</span> <span style="font-weight: bold;">=</span> <span style="color: navy;">obj1</span><br></br><br></br><span style="color: #514b45; font-style: italic;">// Are they the same?</span><br></br><span style="color: navy;">obj1</span><span>.</span><span style="color: navy;">message</span> <span style="font-weight: bold;">==</span> <span style="color: navy;">obj2</span><span>.</span><span style="color: navy;">message</span><br></br><span style="font-weight: bold;">></span> <span style="font-weight: bold;">true</span><br></br><br></br><span style="color: #514b45; font-style: italic;">// At the moment, they are linked by reference, so changing a value in one will change a value in another</span><br></br><span style="color: navy;">obj2</span><span>.</span><span style="color: navy;">message</span><br></br><span style="font-weight: bold;">></span> <span>"</span><span style="color: #dd1144;">Hello!</span><span>"</span><br></br><br></br><span style="color: navy;">obj1</span><span>.</span><span style="color: navy;">message</span> <span style="font-weight: bold;">=</span> <span>'</span><span style="color: #dd1144;">Goodbye!</span><span>'</span><br></br><span style="color: navy;">obj2</span><span>.</span><span style="color: navy;">message</span><br></br><span style="font-weight: bold;">></span> <span>"</span><span style="color: #dd1144;">Goodbye!</span><span>"</span><br></br><br></br><span style="color: #514b45; font-style: italic;">// OK, but what we stringify and then parse one object's values and reassign it?</span><br></br><span style="color: navy;">obj2</span> <span style="font-weight: bold;">=</span> <span style="color: navy;">JSON</span><span>.</span><span style="color: navy;">parse</span><span>(</span><span style="color: navy;">JSON</span><span>.</span><span style="color: navy;">stringify</span><span>(</span><span style="color: navy;">obj1</span><span>))</span><br></br><span style="color: navy;">obj2</span><span>.</span><span style="color: navy;">message</span> <span style="font-weight: bold;">=</span> <span>'</span><span style="color: #dd1144;">Hello!</span><span>'</span><br></br><br></br><span style="color: #514b45; font-style: italic;">// They are no longer identical! (This is very useful for large objects!)</span><br></br><span style="color: navy;">obj1</span><span>.</span><span style="color: navy;">message</span><br></br><span style="font-weight: bold;">></span> <span>"</span><span style="color: #dd1144;">Goodbye!</span><span>"</span><br></br><span style="color: navy;">obj2</span><span>.</span><span style="color: navy;">message</span><br></br><span style="font-weight: bold;">></span> <span>"</span><span style="color: #dd1144;">Hello!</span><span>"</span><br></br></span>
+```
+```
+
+</div></div><span style="font-family: Fira Sans; vertical-align: inherit;">Dari perspektif kinerja, ini sebenarnya cukup cepat, dan tentu saja menghemat kerumitan menulis loop.</span>
